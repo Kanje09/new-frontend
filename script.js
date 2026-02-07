@@ -14,6 +14,17 @@ function initLockscreen() {
   document.addEventListener("keydown", unlockScreen);
 }
 
+// Fullscreen on first click only
+document.addEventListener(
+  "click",
+  () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    }
+  },
+  { once: true }
+);
+
 function unlockScreen(e) {
   if (!isLocked) return;
 
@@ -295,3 +306,4 @@ function goBack() {
   }
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
