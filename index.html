@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turon POS - Point of Sale System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Lockscreen -->
+    <div class="lockscreen" id="lockscreen">
+        <div class="lockscreen-content">
+            <div class="lockscreen-icon">🍌</div>
+            <h1 class="lockscreen-title">TURON-AROUND</h1>
+            <p class="lockscreen-subtitle">TURON-AROUND KIOSK</p>
+            <p class="lockscreen-hint">Touch anywhere to unlock</p>
+            <div class="lockscreen-pulse"></div>
+        </div>
+    </div>
+
+    <header class="pos-header">
+        <div class="pos-logo">
+            <span>🍌</span>
+            <h1>TURON-AROUND</h1>
+        </div>
+        <div class="pos-info">
+            <div class="info-item">
+                <span class="info-label">Date</span>
+                <span class="info-value" id="current-date"></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Time</span>
+                <span class="info-value" id="current-time"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Left Sidebar Navigation -->
+    <aside class="sidebar-menu">
+        <div class="sidebar-header">
+            <h3>Categories</h3>
+        </div>
+        <div class="sidebar-categories">
+            <button class="category-btn active" onclick="filterProducts('all')">All Products</button>
+            <button class="category-btn" onclick="filterProducts('classic')">🍌 Classic</button>
+            <button class="category-btn" onclick="filterProducts('ube')">💜 Ube</button>
+            <button class="category-btn" onclick="filterProducts('cheese')">🧀 Cheese</button>
+            <button class="category-btn" onclick="filterProducts('chocolate')">🍫 Chocolate</button>
+            <button class="category-btn" onclick="filterProducts('mango')">🥭 Mango</button>
+            <button class="category-btn" onclick="filterProducts('special')">⭐ Special Mix</button>
+        </div>
+    </aside>
+
+    <div class="pos-container">
+        <div class="products-section">
+            <div class="section-header">
+                <h2>Select Products</h2>
+                <p>Click on items to add to order</p>
+            </div>
+            <div class="products-grid">
+                <div class="product-item" onclick="addToCart('classic', 'Classic Turon', 35)">
+                    <div class="product-icon">🍌</div>
+                    <div class="product-name">Classic Turon</div>
+                    <div class="product-price">₱35.00</div>
+                </div>
+                <div class="product-item" onclick="addToCart('ube', 'Ube Turon', 45)">
+                    <div class="product-icon">💜</div>
+                    <div class="product-name">Ube Turon</div>
+                    <div class="product-price">₱45.00</div>
+                </div>
+                <div class="product-item" onclick="addToCart('cheese', 'Cheese Turon', 40)">
+                    <div class="product-icon">🧀</div>
+                    <div class="product-name">Cheese Turon</div>
+                    <div class="product-price">₱40.00</div>
+                </div>
+                <div class="product-item" onclick="addToCart('chocolate', 'Chocolate Turon', 50)">
+                    <div class="product-icon">🍫</div>
+                    <div class="product-name">Chocolate Turon</div>
+                    <div class="product-price">₱50.00</div>
+                </div>
+                <div class="product-item" onclick="addToCart('mango', 'Mango Turon', 55)">
+                    <div class="product-icon">🥭</div>
+                    <div class="product-name">Mango Turon</div>
+                    <div class="product-price">₱55.00</div>
+                </div>
+                <div class="product-item" onclick="addToCart('special', 'Special Mix Turon', 65)">
+                    <div class="product-icon">⭐</div>
+                    <div class="product-name">Special Mix</div>
+                    <div class="product-price">₱65.00</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-section" id="cart-section">
+            <div class="cart-header">
+                <button class="back-btn" onclick="goBack()">
+                    <svg viewBox="0 0 24 24">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <div class="cart-header-text">
+                    <h2>Current Order</h2>
+                    <p class="order-number">Order #<span id="order-number">0001</span></p>
+                </div>
+            </div>
+
+            <div class="cart-items" id="cart-items">
+                <div class="cart-empty">
+                    <div class="cart-empty-icon">🛒</div>
+                    <p>No items in order</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Select products to begin</p>
+                </div>
+            </div>
+
+            <div class="cart-summary" id="cart-summary" style="display: none;">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span class="amount" id="subtotal">₱0.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>TOTAL:</span>
+                    <span class="amount" id="total">₱0.00</span>
+                </div>
+            </div>
+
+            <div class="cart-actions">
+                <button class="btn btn-checkout" id="checkout-btn" onclick="checkout()" disabled>
+                    Process Payment
+                </button>
+                <button class="btn btn-clear" onclick="clearCart()">
+                    Clear Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="receipt-modal">
+        <div class="receipt-card">
+            <div class="receipt-header">
+                <h3>TURON POS</h3>
+                <p>Official Receipt</p>
+                <p id="r-date-time"></p>
+                <p>Order: #<span id="r-order-no"></span></p>
+            </div>
+
+            <div id="r-items-list" class="receipt-items">
+            </div>
+
+            <div class="receipt-total-section">
+                <div class="receipt-line">
+                    <span>SUBTOTAL</span>
+                    <span id="r-subtotal"></span>
+                </div>
+                <div class="receipt-line" style="font-weight: bold; font-size: 1.1rem; margin-top: 5px;">
+                    <span>TOTAL</span>
+                    <span id="r-total"></span>
+                </div>
+                <div class="receipt-line" style="margin-top: 10px; color: #555;">
+                    <span>CASH TENDERED</span>
+                    <span id="r-cash"></span>
+                </div>
+                <div class="receipt-line" style="color: #555;">
+                    <span>CHANGE</span>
+                    <span id="r-change"></span>
+                </div>
+            </div>
+
+            <div class="receipt-pickup-code">
+                <p style="font-size: 0.8rem; color: #666; margin-bottom: 5px;">PICKUP CODE</p>
+                <div class="pickup-code-display" id="r-pickup-code"
+                    style="font-size: 2rem; font-weight: bold; color: var(--primary); letter-spacing: 5px; text-align: center;">
+                    0000</div>
+                <p style="font-size: 0.8rem; color: #666; margin-top: 5px; text-align: center;">Customer shows this code
+                    to collect order</p>
+            </div>
+
+            <div class="receipt-footer">
+                <p>THANK YOU FOR YOUR PURCHASE!</p>
+                <p>Please come again.</p>
+                <button class="btn-done" onclick="closeReceipt()">Done / Return to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pickup Screen Modal - MOVED TO POS-SYSTEM ONLY -->
+
+    <button class="cart-toggle" onclick="toggleCart()">
+        🛒
+        <span class="cart-badge" id="cart-badge" style="display: none;">0</span>
+    </button>
+
+    <div class="notification" id="notification">
+        <span class="notification-icon">✓</span>
+        <span id="notification-text"></span>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
